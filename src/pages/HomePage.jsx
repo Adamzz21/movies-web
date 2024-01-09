@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { JokeContext } from "../context/JokeProvider";
 
 export default function HomePage() {
-  const { user } = useContext(JokeContext);
+  const { user, logout } = useContext(JokeContext);
 
   return (
     <Center h={"100vh"}>
@@ -23,6 +23,13 @@ export default function HomePage() {
           Go to favorite jokes
         </Button>
       </Link>
+      {user ? (
+        <Button onClick={() => logout()}>Logout</Button>
+      ) : (
+        <Link to={"/login"}>
+          <Button>Login</Button>
+        </Link>
+      )}
     </Center>
   );
 }

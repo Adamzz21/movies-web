@@ -1,11 +1,16 @@
 import { Button, Center, CloseButton, Input, Stack } from "@mantine/core";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { JokeContext } from "../context/JokeProvider";
 
 function CreatjokeForm() {
   const [jokeText, setJokeText] = useState("");
   const [isSubmiting, setIsSubmiting] = useState(false);
+
+  let navigate = useNavigate();
+
+  const { user } = useContext(JokeContext);
 
   const handleSubmitJoke = async () => {
     const pyload = {
@@ -14,7 +19,10 @@ function CreatjokeForm() {
     };
     setIsSubmiting(true);
     try {
-      const data = await axios.post("http://localhost:5000/jokes", pyload);
+      const data = await axios.post("http://localhost:5000/jokes", pyload, {
+        headers: { Authorization: `Bearer ${user?.token}` },
+      });
+      navigate("/jokes");
       console.log(data.id);
     } catch (error) {
       console.log(error);

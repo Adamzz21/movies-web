@@ -7,7 +7,6 @@ import { JokeContext } from "../context/JokeProvider";
 
 export default function JokeList() {
   const { user, logout } = useContext(JokeContext);
-
   const [jokes, setJokes] = useState([]);
   const [value, setValue] = useState("");
   const fetchJokes = async () => {
