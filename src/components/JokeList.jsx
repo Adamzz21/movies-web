@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import { JokeContext } from "../context/JokeProvider";
 
 export default function JokeList() {
+  const { user, logout } = useContext(JokeContext);
+
   const [jokes, setJokes] = useState([]);
   const [value, setValue] = useState("");
   const fetchJokes = async () => {
@@ -17,11 +19,11 @@ export default function JokeList() {
     fetchJokes();
   }, []);
   const handleDeleteJoke = async (id) => {
-    await axios.delete("http://localhost:5000/jokes/" + id);
+    await axios.delete("http://localhost:5000/jokes/" + id, {
+      headers: { Authorization: `Bearer ${user?.token}` },
+    });
     fetchJokes();
   };
-
-  const { user, logout } = useContext(JokeContext);
 
   return (
     <div>
@@ -30,7 +32,7 @@ export default function JokeList() {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          padding: 10
+          padding: 10,
         }}
       >
         <div>
