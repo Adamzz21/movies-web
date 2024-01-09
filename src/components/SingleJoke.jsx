@@ -12,7 +12,7 @@ export default function SingleJoke() {
 
   const fetchJoke = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/jokes/" + id);
+      const res = await axios.get("http://localhost:5000/jokes/" + id);
       setJoke(res.data);
     } catch (error) {
       console.log(error);
@@ -24,7 +24,7 @@ export default function SingleJoke() {
   }, []);
 
   const handleDeleteJoke = async (id) => {
-    await axios.delete("http://localhost:8000/jokes/" + id);
+    await axios.delete("http://localhost:5000/jokes/" + id);
     navigate("/jokes");
   };
 

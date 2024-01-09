@@ -14,7 +14,7 @@ function CreatjokeForm() {
     };
     setIsSubmiting(true);
     try {
-      const data = await axios.post("http://localhost:8000/jokes", pyload);
+      const data = await axios.post("http://localhost:5000/jokes", pyload);
       console.log(data.id);
     } catch (error) {
       console.log(error);

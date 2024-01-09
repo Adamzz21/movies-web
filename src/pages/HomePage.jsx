@@ -1,8 +1,11 @@
 import { Button, Center } from "@mantine/core";
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { JokeContext } from "../context/JokeProvider";
 
 export default function HomePage() {
+  const { user } = useContext(JokeContext);
+
   return (
     <Center h={"100vh"}>
       <Link to={"/jokes"}>
@@ -11,7 +14,7 @@ export default function HomePage() {
         </Button>
       </Link>
       <Link to={"/create-joke"}>
-        <Button size="md" variant="light" m={20}>
+        <Button size="md" variant="light" m={20} disabled={!user?.isAdmin}>
           Go to create joke
         </Button>
       </Link>

@@ -1,14 +1,15 @@
-import { Button, Grid, GridCol, Input, TextInput } from "@mantine/core";
+import { Box, Button, Grid, GridCol, Input, TextInput } from "@mantine/core";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import JokeCard from "./JokeCard";
 import { Link } from "react-router-dom";
+import { JokeContext } from "../context/JokeProvider";
 
 export default function JokeList() {
   const [jokes, setJokes] = useState([]);
   const [value, setValue] = useState("");
   const fetchJokes = async () => {
-    const res = await axios.get("http://localhost:8000/jokes");
+    const res = await axios.get("http://localhost:5000/jokes");
     setJokes(res.data);
   };
 
@@ -16,20 +17,39 @@ export default function JokeList() {
     fetchJokes();
   }, []);
   const handleDeleteJoke = async (id) => {
-    await axios.delete("http://localhost:8000/jokes/" + id);
+    await axios.delete("http://localhost:5000/jokes/" + id);
     fetchJokes();
   };
 
+  const { user, logout } = useContext(JokeContext);
+
   return (
     <div>
-      <div>
-        <Link to={"/"}>
-          <Button m={20}>go to HomePage</Button>
-        </Link>
-        <Link to={"/favJoke"}>
-          <Button m={20}>go to favorite</Button>
-        </Link>
-      </div>
+      <Box
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: 10
+        }}
+      >
+        <div>
+          {" "}
+          <Link to={"/"}>
+            <Button m={20}>go to HomePage</Button>
+          </Link>
+          <Link to={"/favJoke"}>
+            <Button m={20}>go to favorite</Button>
+          </Link>
+        </div>
+        {user ? (
+          <Button onClick={() => logout()}>Logout</Button>
+        ) : (
+          <Link to={"/login"}>
+            <Button>Login</Button>
+          </Link>
+        )}
+      </Box>
       <TextInput
         placeholder="type to search for a joke"
         value={value}
@@ -48,7 +68,11 @@ export default function JokeList() {
           })
           .map((joke) => (
             <Grid.Col span="3" key={joke?.id}>
-              <JokeCard joke={joke} handleDeleteJoke={handleDeleteJoke} />
+              <JokeCard
+                joke={joke}
+                handleDeleteJoke={handleDeleteJoke}
+                disableDeletion={!user?.isAdmin}
+              />
             </Grid.Col>
           ))}
       </Grid>
